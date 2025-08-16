@@ -10,7 +10,7 @@ export async function createNewCategory(category: {
   name: string;
   description: string;
 }) {
-  createCategoryAction(category);
+  await createCategoryAction(category);
   revalidatePath("/categories");
 }
 
@@ -21,10 +21,11 @@ export async function updateCategoryAction(
     description: string;
   }
 ) {
-  return await updateCategory(id, category);
+  await updateCategory(id, category);
+  revalidatePath("/categories");
 }
 
 export async function deleteCategoryAction(id: string) {
-  deleteCategory(id);
+  await deleteCategory(id);
   revalidatePath("/categories");
 }

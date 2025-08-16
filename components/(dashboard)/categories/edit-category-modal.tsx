@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { updateCategory } from "@/services/category";
+import { updateCategoryAction } from "@/actions/category";
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -30,7 +30,7 @@ export default function EditCategoryModal({
     e.preventDefault();
     setIsPending(true);
     try {
-      await updateCategory(category.id, { name, description });
+      await updateCategoryAction(category.id, { name, description });
       route.refresh();
       onUpdated?.();
       onClose(); // ✅ Close modal after success
