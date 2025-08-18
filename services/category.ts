@@ -1,7 +1,7 @@
 "server-only";
 
 import { connectDB } from "@/lib/db";
-import Category from "@/model/category";
+import Category from "@/models/category";
 
 export async function createCategoryAction(category: {
   name: string;

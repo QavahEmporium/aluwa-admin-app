@@ -2,7 +2,7 @@
 "use server";
 
 import { connectDB } from "@/lib/db";
-import Product from "@/model/product";
+import Product from "@/models/product";
 import { IProduct } from "@/definitions/product";
 
 export async function createProduct(input: any) {

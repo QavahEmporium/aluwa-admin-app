@@ -1,6 +1,6 @@
 "use server";
 import { connectDB } from "@/lib/db";
-import Category from "@/model/category";
+import Category from "@/models/category";
 
 export async function listCategories() {
   await connectDB();

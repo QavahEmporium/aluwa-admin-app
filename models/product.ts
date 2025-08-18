@@ -1,7 +1,7 @@
 // src/models/Product.ts
 import { IProduct } from "@/definitions/product";
 import mongoose, { Schema, Document, Model, Types } from "mongoose";
-import Category from "@/model/category"; // 👈 ensures schema is registered
+import Category from "@/models/category"; // 👈 ensures schema is registered
 
 interface ProductDocument
   extends Document,

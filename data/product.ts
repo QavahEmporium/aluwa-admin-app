@@ -1,7 +1,7 @@
 "use server";
 
 import { connectDB } from "@/lib/db";
-import Product from "@/model/product";
+import Product from "@/models/product";
 import mongoose from "mongoose";
 
 export async function listProducts(query?: {
