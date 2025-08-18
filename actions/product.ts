@@ -3,7 +3,6 @@ import { revalidatePath } from "next/cache";
 import { ProductFormState } from "@/definitions/product";
 import { productFormSchema } from "@/validations/products";
 
-import { updateProductController } from "@/controllers/product";
 import {
   createProduct,
   deleteProduct,
@@ -13,9 +12,6 @@ import { Types } from "mongoose";
 import { redirect } from "next/navigation";
 import { deleteFileByNameAction } from "./file";
 
-export async function updateProductAction(id: string, formData: FormData) {
-  return updateProductController(id, formData);
-}
 
 export async function deleteProductAction(id: string, imageUrl: string) {
   await deleteFileByNameAction(imageUrl);
