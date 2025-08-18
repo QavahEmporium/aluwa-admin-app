@@ -9,6 +9,7 @@ export async function listCategories() {
     id: cat._id.toString(),
     name: cat.name,
     description: cat.description,
+    isPublished: cat.isPublished,
   }));
 }
 

@@ -31,3 +31,17 @@ export async function deleteCategory(id: string) {
   await Category.findByIdAndDelete(id);
   return { ok: true };
 }
+
+export async function togglePublishCategory(id: string) {
+  await connectDB();
+  const category = await Category.findById(id);
+  if (!category) throw new Error("Category not found");
+
+  category.isPublished = !category.isPublished;
+  try {
+    await category.save();
+    console.log("Success updating publish category");
+  } catch (e) {
+    console.log("Error updating publish category");
+  }
+}

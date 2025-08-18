@@ -52,7 +52,8 @@ export default function Categories({ cats }: { cats: any[] }) {
           <thead>
             <tr className="bg-gray-100">
               <th className="border border-black px-4 py-2 text-left">Name</th>
-              <th className="border border-black px-4 py-2 text-left">Slug</th>
+              <th className="border border-black px-4 py-2 text-left">Description</th>
+              <th className="border border-black px-4 py-2 text-left">Status</th>
               <th className="border border-black px-4 py-2 text-left">
                 Actions
               </th>

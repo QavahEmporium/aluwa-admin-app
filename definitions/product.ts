@@ -19,6 +19,7 @@ export interface IProduct {
 export interface ICategory {
   name: string;
   description?: string;
+  isPublished?: boolean;
 }
 
 export interface IProduct {
@@ -29,6 +30,7 @@ export interface IProduct {
   stock: number;
   categoryId: Types.ObjectId | string;
   imageUrl: string;
+  isPublished?: boolean;
 }
 
 export type ProductFormState = {

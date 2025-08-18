@@ -2,6 +2,7 @@
 import {
   createCategoryAction,
   deleteCategory,
+  togglePublishCategory,
   updateCategory,
 } from "@/services/category";
 import { revalidatePath } from "next/cache";
@@ -27,5 +28,10 @@ export async function updateCategoryAction(
 
 export async function deleteCategoryAction(id: string) {
   await deleteCategory(id);
+  revalidatePath("/categories");
+}
+
+export async function togglePublishCategoryAction(id: string) {
+  await togglePublishCategory(id);
   revalidatePath("/categories");
 }
