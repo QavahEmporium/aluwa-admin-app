@@ -1,0 +1,66 @@
+"use server";
+import { revalidatePath } from "next/cache";
+import { ProductFormState } from "@/definitions/product";
+import { productFormSchema } from "@/validations/products";
+
+import { updateProductController } from "@/controllers/product";
+import {
+  createProduct,
+  deleteProduct,
+  updateProduct,
+} from "@/services/product";
+import { Types } from "mongoose";
+import { redirect } from "next/navigation";
+import { deleteFileByNameAction } from "./file";
+
+export async function updateProductAction(id: string, formData: FormData) {
+  return updateProductController(id, formData);
+}
+
+export async function deleteProductAction(id: string, imageUrl: string) {
+  await deleteFileByNameAction(imageUrl);
+  await deleteProduct(id);
+}
+
+export async function createProductAction(
+  productId: string,
+  prevState: ProductFormState | undefined,
+  formData: FormData
+) {
+  try {
+    const validatedFields = productFormSchema.safeParse(
+      Object.fromEntries(formData)
+    );
+
+    if (!validatedFields.success) {
+      const state: ProductFormState = {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: "Oops, I think there's a mistake with your inputs.",
+      };
+      console.log({ state });
+      return state;
+    }
+
+    const { name, description, price, stock, categoryId, imageUrl } =
+      validatedFields.data;
+
+    const obj = {
+      name,
+      description,
+      price,
+      stock,
+      categoryId: new Types.ObjectId(categoryId),
+      imageUrl,
+    };
+
+    if (productId) await updateProduct(productId, obj);
+    else await createProduct(obj);
+  } catch (error: any) {
+    return {
+      message: "Failed to create product",
+      errors: { global: error.message },
+    };
+  }
+  revalidatePath("/products");
+  redirect("/products");
+}
