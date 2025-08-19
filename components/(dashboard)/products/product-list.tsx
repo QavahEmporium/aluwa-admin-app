@@ -26,7 +26,7 @@ export default function ProductListPage({
   const filteredProducts = useMemo(() => {
     return products.filter(
       (product) =>
-        (category === "All" || product.category?.name === category) &&
+        (category === "All" || product.category === category) &&
         product.name.toLowerCase().includes(search.toLowerCase())
     );
   }, [products, search, category]);
