@@ -8,7 +8,7 @@ export default async function EditProductPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  console.log({ id });
+
   const prod = await getProductById(id);
   const categories = await listCategories();
   const categoriesMap = categories.map((c: any) => ({

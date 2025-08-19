@@ -28,6 +28,7 @@ export async function listProducts(query?: {
     price: p.price,
     imageUrl: p.imageUrl,
     stock: p.stock,
+    isPublished: p.isPublished,
   }));
 }
 
@@ -44,5 +45,6 @@ export async function getProductById(id: string) {
     price: product.price,
     imageUrl: product.imageUrl,
     stock: product.stock,
+    isPublished: product.isPublished,
   };
 }

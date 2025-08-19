@@ -6,12 +6,12 @@ import { productFormSchema } from "@/validations/products";
 import {
   createProduct,
   deleteProduct,
+  togglePublishProduct,
   updateProduct,
 } from "@/services/product";
 import { Types } from "mongoose";
 import { redirect } from "next/navigation";
 import { deleteFileByNameAction } from "./file";
-
 
 export async function deleteProductAction(id: string, imageUrl: string) {
   await deleteFileByNameAction(imageUrl);
@@ -33,7 +33,7 @@ export async function createProductAction(
         errors: validatedFields.error.flatten().fieldErrors,
         message: "Oops, I think there's a mistake with your inputs.",
       };
-      console.log({ state });
+
       return state;
     }
 
@@ -59,4 +59,10 @@ export async function createProductAction(
   }
   revalidatePath("/products");
   redirect("/products");
+}
+
+export async function togglePublishProductAction(id: string) {
+  await togglePublishProduct(id);
+  revalidatePath("/products");
+  revalidatePath(`/products/${id}`);
 }

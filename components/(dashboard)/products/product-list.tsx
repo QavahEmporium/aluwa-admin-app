@@ -26,7 +26,7 @@ export default function ProductListPage({
   const filteredProducts = useMemo(() => {
     return products.filter(
       (product) =>
-        (category === "All" || product.category?.name === category) &&
+        (category === "All" || product.category === category) &&
         product.name.toLowerCase().includes(search.toLowerCase())
     );
   }, [products, search, category]);
@@ -80,34 +80,53 @@ export default function ProductListPage({
         {filteredProducts.map((product) => (
           <div
             key={product.id}
-            className="border border-black p-4 rounded flex gap-4 items-center"
+            className="border border-black p-4 rounded flex flex-col gap-1"
           >
-            <Image
-              src={`/api/files/${product.imageUrl}`}
-              alt={product.name}
-              width={60}
-              height={60}
-              className="rounded border border-black"
-            />
-            <div className="flex-1">
-              <div className="font-semibold">{product.name}</div>
-              <div className="text-sm text-gray-600">{product.category}</div>
-              <div className="font-bold mt-1">${product.price.toFixed(2)}</div>
-              <div className="text-sm">Stock: {product.stock}</div>
+            <div className="flex justify-between items-center">
+              <div className="flex flex-row gap-3">
+                <Image
+                  src={`/api/files/${product.imageUrl}`}
+                  alt={product.name}
+                  width={60}
+                  height={60}
+                  className="rounded border border-black"
+                />
+                <div className="flex flex-col gap-1">
+                  <div className="font-semibold leading-none">
+                    {product.name}
+                  </div>
+                  <div className="text-sm text-gray-600 leading-none">
+                    {product.category}
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-row gap-1">
+                <Link
+                  href={`/products/${product.id}/edit`}
+                  className="border border-black px-2 py-1 rounded text-xs"
+                >
+                  Edit
+                </Link>
+                <button
+                  onClick={() => setDeleteId(product.id)}
+                  className="border border-black px-2 py-1 rounded text-xs text-red-600"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
-            <div className="flex flex-col gap-1">
-              <Link
-                href={`/products/${product.id}/edit`}
-                className="border border-black px-2 py-1 rounded text-xs"
-              >
-                Edit
-              </Link>
-              <button
-                onClick={() => setDeleteId(product.id)}
-                className="border border-black px-2 py-1 rounded text-xs text-red-600"
-              >
-                Delete
-              </button>
+            <div className="flex flex-row gap-3 items-center">
+              <div className="font-bold">${product.price.toFixed(2)}</div>
+              <div className="text-sm">Stock: {product.stock}</div>
+
+              <div className="text-sm">
+                Status:{" "}
+                {product.isPublished ? (
+                  <span className="text-green-600">Published</span>
+                ) : (
+                  <span className="text-gray-500">Unpublished</span>
+                )}
+              </div>
             </div>
           </div>
         ))}
@@ -125,6 +144,9 @@ export default function ProductListPage({
               </th>
               <th className="border border-black px-4 py-2 text-left">Price</th>
               <th className="border border-black px-4 py-2 text-left">Stock</th>
+              <th className="border border-black px-4 py-2 text-left">
+                Status
+              </th>
               <th className="border border-black px-4 py-2 text-left">
                 Actions
               </th>
@@ -153,6 +175,17 @@ export default function ProductListPage({
                 </td>
                 <td className="border border-black px-4 py-2">
                   {product.stock}
+                </td>
+                <td className="border border-black px-4 py-2">
+                  {product.isPublished ? (
+                    <span className="text-green-600 font-medium">
+                      Published
+                    </span>
+                  ) : (
+                    <span className="text-gray-500 font-medium">
+                      Unpublished
+                    </span>
+                  )}
                 </td>
                 <td className="border border-black px-4 py-2 flex gap-2">
                   <Link

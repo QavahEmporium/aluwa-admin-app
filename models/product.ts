@@ -24,6 +24,7 @@ const ProductSchema = new Schema<ProductDocument>(
       required: true,
       index: true,
     },
+    isPublished: { type: Boolean, default: false }, // 👈 new field
   },
   { timestamps: true }
 );
