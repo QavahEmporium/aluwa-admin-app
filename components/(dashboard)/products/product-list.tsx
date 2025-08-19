@@ -26,7 +26,7 @@ export default function ProductListPage({
   const filteredProducts = useMemo(() => {
     return products.filter(
       (product) =>
-        (category === "All" || product.category === category) &&
+        (category === "All" || product.category?.name === category) &&
         product.name.toLowerCase().includes(search.toLowerCase())
     );
   }, [products, search, category]);
@@ -43,22 +43,22 @@ export default function ProductListPage({
   };
 
   return (
-    <div>
-      <h1 className="text-xl font-bold mb-4">Products</h1>
+    <div className="p-0 md:p-4">
+      <h1 className="text-xl md:text-2xl font-bold mb-6">Products</h1>
 
       {/* Controls */}
-      <div className="flex flex-col md:flex-row gap-2 mb-4">
+      <div className="flex flex-col md:flex-row gap-3 mb-6">
         <input
           type="text"
           placeholder="Search products..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="border border-black px-3 py-2 rounded w-full md:w-1/3"
+          className="border border-gray-300 px-3 py-2 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 focus:ring-black"
         />
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="border border-black px-3 py-2 rounded w-full md:w-1/4"
+          className="border border-gray-300 px-3 py-2 rounded-lg w-full md:w-1/4 focus:outline-none focus:ring-2 focus:ring-black"
         >
           <option value="All">All Categories</option>
           {cats.map((cat) => (
@@ -69,7 +69,7 @@ export default function ProductListPage({
         </select>
         <Link
           href="/products/add"
-          className="border border-black px-4 py-2 rounded hover:bg-black hover:text-white transition"
+          className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition text-center"
         >
           + Add Product
         </Link>
@@ -80,52 +80,52 @@ export default function ProductListPage({
         {filteredProducts.map((product) => (
           <div
             key={product.id}
-            className="border border-black p-4 rounded flex flex-col gap-1"
+            className="border border-gray-200 shadow-sm p-4 rounded-xl flex flex-col gap-3 bg-white"
           >
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-start">
               <div className="flex flex-row gap-3">
                 <Image
                   src={`/api/files/${product.imageUrl}`}
                   alt={product.name}
                   width={60}
-                  height={60}
-                  className="rounded border border-black"
+                  height={30}
+                  className="rounded-md border border-gray-200"
                 />
-                <div className="flex flex-col gap-1">
-                  <div className="font-semibold leading-none">
-                    {product.name}
-                  </div>
-                  <div className="text-sm text-gray-600 leading-none">
+                <div>
+                  <div className="font-semibold">{product.name}</div>
+                  <div className="text-sm text-gray-600">
                     {product.category}
                   </div>
+                  <div className="font-bold mt-1">
+                    ${product.price.toFixed(2)}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    Stock: {product.stock}
+                  </div>
+                  <span
+                    className={`inline-block mt-1 px-2 py-0.5 text-xs rounded-full ${
+                      product.isPublished
+                        ? "bg-green-100 text-green-700"
+                        : "bg-gray-200 text-gray-600"
+                    }`}
+                  >
+                    {product.isPublished ? "Published" : "Unpublished"}
+                  </span>
                 </div>
               </div>
-              <div className="flex flex-row gap-1">
+              <div className="flex gap-2">
                 <Link
                   href={`/products/${product.id}/edit`}
-                  className="border border-black px-2 py-1 rounded text-xs"
+                  className="px-3 py-1 rounded-md border border-gray-300 text-xs hover:bg-gray-100"
                 >
                   Edit
                 </Link>
                 <button
                   onClick={() => setDeleteId(product.id)}
-                  className="border border-black px-2 py-1 rounded text-xs text-red-600"
+                  className="px-3 py-1 rounded-md border border-red-300 text-xs text-red-600 hover:bg-red-50"
                 >
                   Delete
                 </button>
-              </div>
-            </div>
-            <div className="flex flex-row gap-3 items-center">
-              <div className="font-bold">${product.price.toFixed(2)}</div>
-              <div className="text-sm">Stock: {product.stock}</div>
-
-              <div className="text-sm">
-                Status:{" "}
-                {product.isPublished ? (
-                  <span className="text-green-600">Published</span>
-                ) : (
-                  <span className="text-gray-500">Unpublished</span>
-                )}
               </div>
             </div>
           </div>
@@ -134,75 +134,66 @@ export default function ProductListPage({
 
       {/* Desktop */}
       <div className="hidden md:block overflow-x-auto">
-        <table className="w-full border-collapse border border-black">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="border border-black px-4 py-2 text-left">Image</th>
-              <th className="border border-black px-4 py-2 text-left">Name</th>
-              <th className="border border-black px-4 py-2 text-left">
-                Category
-              </th>
-              <th className="border border-black px-4 py-2 text-left">Price</th>
-              <th className="border border-black px-4 py-2 text-left">Stock</th>
-              <th className="border border-black px-4 py-2 text-left">
-                Status
-              </th>
-              <th className="border border-black px-4 py-2 text-left">
-                Actions
-              </th>
+        <table className="w-full border border-gray-200 shadow-sm rounded-lg overflow-hidden">
+          <thead className="bg-gray-50 text-sm">
+            <tr>
+              <th className="px-4 py-3 text-left">Image</th>
+              <th className="px-4 py-3 text-left">Name</th>
+              <th className="px-4 py-3 text-left">Category</th>
+              <th className="px-4 py-3 text-left">Price</th>
+              <th className="px-4 py-3 text-left">Stock</th>
+              <th className="px-4 py-3 text-left">Status</th>
+              <th className="px-4 py-3 text-left">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text-sm divide-y divide-gray-200">
             {filteredProducts.map((product) => (
-              <tr key={product.id}>
-                <td className="border border-black px-4 py-2">
+              <tr
+                key={product.id}
+                className="hover:bg-gray-50 transition-colors"
+              >
+                <td className="px-4 py-3">
                   <Image
                     src={`/api/files/${product.imageUrl}`}
                     alt={product.name}
-                    width={60}
-                    height={60}
-                    className="rounded border border-black"
+                    width={50}
+                    height={50}
+                    className="rounded-md border border-gray-200"
                   />
                 </td>
-                <td className="border border-black px-4 py-2">
-                  {product.name}
-                </td>
-                <td className="border border-black px-4 py-2">
-                  {product.category}
-                </td>
-                <td className="border border-black px-4 py-2">
-                  ${product.price.toFixed(2)}
-                </td>
-                <td className="border border-black px-4 py-2">
-                  {product.stock}
-                </td>
-                <td className="border border-black px-4 py-2">
-                  {product.isPublished ? (
-                    <span className="text-green-600 font-medium">
-                      Published
-                    </span>
-                  ) : (
-                    <span className="text-gray-500 font-medium">
-                      Unpublished
-                    </span>
-                  )}
-                </td>
-                <td className="border border-black px-4 py-2 flex gap-2">
-                  <Link
-                    href={`/products/${product.id}/edit`}
-                    className="border border-black px-2 py-1 rounded text-xs"
+                <td className="px-4 py-3 font-medium">{product.name}</td>
+                <td className="px-4 py-3">{product.category}</td>
+                <td className="px-4 py-3">${product.price.toFixed(2)}</td>
+                <td className="px-4 py-3">{product.stock}</td>
+                <td className="px-4 py-3">
+                  <span
+                    className={`px-2 py-0.5 text-xs rounded-full ${
+                      product.isPublished
+                        ? "bg-green-100 text-green-700"
+                        : "bg-gray-200 text-gray-600"
+                    }`}
                   >
-                    Edit
-                  </Link>
-                  <button
-                    onClick={() => {
-                      setDeleteId(product.id);
-                      setImageUrl(product.imageUrl);
-                    }}
-                    className="border border-black px-2 py-1 rounded text-xs text-red-600"
-                  >
-                    Delete
-                  </button>
+                    {product.isPublished ? "Published" : "Unpublished"}
+                  </span>
+                </td>
+                <td className="py-3">
+                  <div className="inline-flex gap-2">
+                    <Link
+                      href={`/products/${product.id}/edit`}
+                      className="px-3 py-1 rounded-md border border-gray-300 text-xs hover:bg-gray-100"
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setDeleteId(product.id);
+                        setImageUrl(product.imageUrl);
+                      }}
+                      className="px-3 py-1 rounded-md border border-red-300 text-xs text-red-600 hover:bg-red-50"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
