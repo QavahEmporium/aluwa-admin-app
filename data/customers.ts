@@ -1,48 +1,69 @@
-// data/customers.ts
-export const customers = [
-  {
-    id: 1,
-    name: "Alice Johnson",
-    email: "alice.johnson@example.com",
-    avatar:
-      "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?w=100&h=100&fit=crop",
-    totalOrders: 5,
-    totalSpend: 450.5,
-  },
-  {
-    id: 2,
-    name: "Bob Smith",
-    email: "bob.smith@example.com",
-    avatar:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
-    totalOrders: 3,
-    totalSpend: 320.0,
-  },
-  {
-    id: 3,
-    name: "Clara Davis",
-    email: "clara.davis@example.com",
-    avatar:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop",
-    totalOrders: 8,
-    totalSpend: 780.75,
-  },
-  {
-    id: 4,
-    name: "Daniel Lee",
-    email: "daniel.lee@example.com",
-    avatar:
-      "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=100&h=100&fit=crop",
-    totalOrders: 2,
-    totalSpend: 150.25,
-  },
-  {
-    id: 5,
-    name: "Eva Martinez",
-    email: "eva.martinez@example.com",
-    avatar:
-      "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=100&h=100&fit=crop",
-    totalOrders: 6,
-    totalSpend: 520.0,
-  },
-];
+import { connectDB } from "@/lib/db";
+import User from "@/models/user";
+import Order from "@/models/order";
+import { Types } from "mongoose";
+
+export async function listUsers() {
+  await connectDB();
+
+  // aggregate orders per user
+  const orderStats = await Order.aggregate([
+    {
+      $group: {
+        _id: "$userId",
+        totalOrders: { $sum: 1 },
+        totalSpend: { $sum: "$totalAmount" },
+      },
+    },
+  ]);
+
+  // make quick lookup by userId
+  const orderStatsMap = orderStats.reduce((acc, stat) => {
+    acc[stat._id.toString()] = {
+      totalOrders: stat.totalOrders,
+      totalSpend: stat.totalSpend,
+    };
+    return acc;
+  }, {} as Record<string, { totalOrders: number; totalSpend: number }>);
+
+  // fetch users
+  const users = (await User.find().lean()) as any[];
+
+  return users.map((u) => ({
+    id: u._id.toString(),
+    name: u.name,
+    email: u.email,
+    totalOrders: orderStatsMap[u._id.toString()]?.totalOrders || 0,
+    totalSpend: orderStatsMap[u._id.toString()]?.totalSpend || 0,
+  }));
+}
+
+export async function getUserWithOrders(userId: string) {
+  await connectDB();
+
+  const user = await User.findById(userId).lean();
+  if (!user) return null;
+
+  const orders = (await Order.find({ userId: new Types.ObjectId(userId) })
+    .sort({ createdAt: -1 })
+    .lean()) as any[];
+
+  return {
+    id: user._id.toString(),
+    name: user.name,
+    email: user.email,
+    createdAt: new Date(user.createdAt as any).toISOString(),
+    orders: orders.map((o) => ({
+      id: o._id.toString(),
+      status: o.status,
+      totalAmount: o.totalAmount,
+      createdAt: new Date(o.createdAt as any).toISOString(),
+      items: o.items?.map((i: any) => ({
+        productId: i.productId?.toString(),
+        name: i.name,
+        price: i.price,
+        quantity: i.quantity,
+      })),
+    })),
+  };
+}
