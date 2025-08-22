@@ -1,6 +1,14 @@
 import ProductAddForm from "@/components/(dashboard)/products/[id]/product-form";
 import { listCategories } from "@/data/category";
-import { getProductById } from "@/data/product";
+import { getProductById, listProducts } from "@/data/product";
+
+export async function generateStaticParams() {
+  const products = await listProducts();
+
+  return products.map((product: any) => ({
+    id: product.id,
+  }));
+}
 
 export default async function EditProductPage({
   params,
