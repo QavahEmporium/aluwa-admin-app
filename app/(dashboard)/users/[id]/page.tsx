@@ -1,6 +1,14 @@
 // app/(dashboard)/users/[id]/page.tsx
-import { getUserWithOrders } from "@/data/customers";
+import { getUserWithOrders, listUsers } from "@/data/customers";
 import UserDetailClient from "@/components/(dashboard)/users/[id]/user-details";
+
+export async function generateStaticParams() {
+  const users = await listUsers();
+
+  return users.map((user: any) => ({
+    id: user.id,
+  }));
+}
 
 export default async function UserDetailPage({
   params,
