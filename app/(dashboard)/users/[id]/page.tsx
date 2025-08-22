@@ -4,7 +4,7 @@
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { customers } from "@/data/customers"; // mock data
-import { orders } from "@/data/orders"; // mock orders data
+import { orders } from "@/constants/orders"; // mock orders data
 
 export default function CustomerDetailPage() {
   const params = useParams();
