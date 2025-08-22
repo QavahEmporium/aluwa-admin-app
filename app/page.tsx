@@ -1,103 +1,135 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  Menu,
+  X,
+  Package,
+  Users,
+  ShoppingCart,
+  LayoutDashboard,
+  LogOut,
+} from "lucide-react";
+
+export default function DashboardLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathname = usePathname(); // Track current route
+
+  // Close sidebar when the route changes
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [pathname]);
+
+  const menuItems = [
+    { label: "Dashboard", href: "/home", icon: LayoutDashboard },
+    { label: "Orders", href: "/orders", icon: ShoppingCart },
+    { label: "Products", href: "/products", icon: Package },
+    { label: "Users", href: "/users", icon: Users },
+  ];
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+    <div className="min-h-screen flex bg-white">
+      {/* Mobile Sidebar */}
+      <div
+        className={`fixed inset-0 z-40 md:hidden transition-transform duration-300 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div
+          className="absolute inset-0 bg-black bg-opacity-50"
+          onClick={() => setSidebarOpen(false)}
         />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+        <aside className="relative z-50 w-64 bg-white border-r border-black h-full p-4 flex flex-col">
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="font-bold text-xl">Admin</h1>
+            <button onClick={() => setSidebarOpen(false)}>
+              <X size={20} />
+            </button>
+          </div>
+          <nav className="flex-1 space-y-2">
+            {menuItems.map(({ label, href, icon: Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+              >
+                <Icon size={18} />
+                {label}
+              </Link>
+            ))}
+          </nav>
+          <button className="flex items-center gap-2 px-3 py-2 mt-6 border border-black rounded hover:bg-gray-100">
+            <LogOut size={18} />
+            Logout
+          </button>
+        </aside>
+      </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      {/* Desktop Sidebar */}
+      <aside className="hidden md:flex md:flex-col w-64 border-r border-black p-4">
+        <h1 className="font-bold text-xl mb-6">Admin</h1>
+        <nav className="flex-1 space-y-2">
+          {menuItems.map(({ label, href, icon: Icon }) => (
+            <Link
+              key={href}
+              href={href}
+              className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+            >
+              <Icon size={18} />
+              {label}
+            </Link>
+          ))}
+        </nav>
+        <button className="flex items-center gap-2 px-3 py-2 mt-6 border border-black rounded hover:bg-gray-100">
+          <LogOut size={18} />
+          Logout
+        </button>
+      </aside>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        {/* Top Navbar */}
+        <header className="flex items-center justify-between border-b border-black p-4">
+          <div className="flex items-center gap-2">
+            <button className="md:hidden" onClick={() => setSidebarOpen(true)}>
+              <Menu size={22} />
+            </button>
+            <h2 className="font-semibold text-lg">Dashboard</h2>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center text-sm">
+              A
+            </div>
+          </div>
+        </header>
+
+        {/* Page Content */}
+        <main className="flex-1 p-4">
+          <div>
+            <h1 className="text-xl font-bold mb-4">Welcome, Admin</h1>
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="border border-black p-4 rounded">
+                <h2 className="font-semibold">Total Orders</h2>
+                <p className="text-2xl font-bold">124</p>
+              </div>
+              <div className="border border-black p-4 rounded">
+                <h2 className="font-semibold">Revenue</h2>
+                <p className="text-2xl font-bold">$12,400</p>
+              </div>
+              <div className="border border-black p-4 rounded">
+                <h2 className="font-semibold">Products</h2>
+                <p className="text-2xl font-bold">56</p>
+              </div>
+              <div className="border border-black p-4 rounded">
+                <h2 className="font-semibold">Users</h2>
+                <p className="text-2xl font-bold">342</p>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }
