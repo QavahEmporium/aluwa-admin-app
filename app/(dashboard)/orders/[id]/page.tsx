@@ -1,8 +1,8 @@
 // app/admin/orders/[id]/page.tsx
-import Link from "next/link";
 import { getOrderById, listAllOrders } from "@/data/orders";
 import { listOrderItems } from "@/data/order-items";
-import UpdateOrderStatus from "@/components/(dashboard)/orders/[id]/UpdateOrderStatus";
+import UpdateOrderStatus from "@/components/(dashboard)/orders/[id]/update-order-status";
+import { BackButton } from "@/components/ui/buttons";
 
 export async function generateStaticParams() {
   const orders = await listAllOrders();
@@ -29,11 +29,8 @@ export default async function OrderDetailPage({
   return (
     <div className="md:p-4 md:p-6 max-w-5xl mx-auto">
       <div className="flex flex-col gap-4 md:flex-row md:justify-between md:items-center mb-3">
-        <div className="flex flex-col mb-3">
-          <Link href="/orders" className="underline block">
-            ← Back to Orders
-          </Link>
-          <h1 className="text-xl md:text-2xl font-bold mb-0">Order Details</h1>
+        <div className="mb-3">
+          <BackButton name="Orders" />
         </div>
 
         {/* Admin Controls */}

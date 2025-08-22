@@ -5,7 +5,7 @@ import {
   togglePublishProductAction,
 } from "@/actions/product";
 import { deleteFileByNameAction, uploadFile } from "@/actions/file";
-import { SubmitButton } from "@/components/ui/Buttons";
+import { SubmitButton } from "@/components/ui/buttons";
 import InputValidated from "@/components/ui/input-validated";
 import Select from "@/components/ui/select-validated";
 import Textarea from "@/components/ui/textarea-validated";
