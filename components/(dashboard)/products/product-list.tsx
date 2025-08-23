@@ -5,19 +5,30 @@ import Image from "next/image";
 import Link from "next/link";
 import { deleteProductAction } from "@/actions/product";
 import DeleteProductModal from "./delete-product-modal";
+import { Product } from "@/definitions/product";
+import Pagination from "@/components/ui/pagination";
+
+interface CategoryOption {
+  label: string;
+  value: string;
+}
 
 export default function ProductListPage({
   cats,
   prods,
 }: {
-  cats: any[];
-  prods: any[];
+  cats: CategoryOption[];
+  prods: Product[];
 }) {
-  const [products, setProducts] = useState<any[]>(prods);
+  const [products, setProducts] = useState<Product[]>(prods);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
 
   useEffect(() => {
     setProducts(prods);
@@ -30,6 +41,13 @@ export default function ProductListPage({
         product.name.toLowerCase().includes(search.toLowerCase())
     );
   }, [products, search, category]);
+
+  const totalPages = Math.ceil(filteredProducts.length / pageSize);
+
+  const paginatedProducts = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredProducts.slice(start, start + pageSize);
+  }, [filteredProducts, currentPage]);
 
   const handleDelete = async (id: string, imageUrl: string) => {
     try {
@@ -52,12 +70,18 @@ export default function ProductListPage({
           type="text"
           placeholder="Search products..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setCurrentPage(1); // reset on search
+          }}
           className="border border-gray-300 px-3 py-2 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 focus:ring-black"
         />
         <select
           value={category}
-          onChange={(e) => setCategory(e.target.value)}
+          onChange={(e) => {
+            setCategory(e.target.value);
+            setCurrentPage(1); // reset on category change
+          }}
           className="border border-gray-300 px-3 py-2 rounded-lg w-full md:w-1/4 focus:outline-none focus:ring-2 focus:ring-black"
         >
           <option value="All">All Categories</option>
@@ -75,9 +99,18 @@ export default function ProductListPage({
         </Link>
       </div>
 
+      {/* Pagination */}
+      <div className="md:hidden mb-4">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      </div>
+
       {/* Mobile */}
       <div className="space-y-4 md:hidden">
-        {filteredProducts.map((product) => (
+        {paginatedProducts.map((product) => (
           <div
             key={product.id}
             className="border border-gray-200 shadow-sm p-4 rounded-xl flex flex-col gap-3 bg-white"
@@ -132,7 +165,7 @@ export default function ProductListPage({
         ))}
       </div>
 
-      {/* Desktop */}
+      {/* Desktop table */}
       <div className="hidden md:block overflow-x-auto">
         <table className="w-full border border-gray-200 shadow-sm rounded-lg overflow-hidden">
           <thead className="bg-gray-50 text-sm">
@@ -147,7 +180,7 @@ export default function ProductListPage({
             </tr>
           </thead>
           <tbody className="text-sm divide-y divide-gray-200">
-            {filteredProducts.map((product) => (
+            {paginatedProducts.map((product) => (
               <tr
                 key={product.id}
                 className="hover:bg-gray-50 transition-colors"
@@ -199,6 +232,15 @@ export default function ProductListPage({
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Pagination */}
+      <div className="">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
       </div>
 
       {/* Delete Modal */}

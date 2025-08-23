@@ -1,20 +1,6 @@
 // src/definitions/product.ts
 import { Types } from "mongoose";
 import { z } from "zod";
-/* 
-export interface IProduct {
-  name: string;
-  slug: string;
-  description: string;
-  price: number;
-  images: string[];
-  sku?: string;
-  stock: number;
-  status?: "active" | "draft";
-  categoryId: Types.ObjectId | string;
-  tags?: string[];
-  attributes?: Record<string, any>;
-} */
 
 export interface ICategory {
   name: string;
@@ -45,3 +31,18 @@ export type ProductFormState = {
   };
   message: string;
 };
+
+export interface Category {
+  id: string;
+  name: string;
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  stock: number;
+  imageUrl: string;
+  isPublished: boolean;
+}

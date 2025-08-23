@@ -11,6 +11,7 @@ import {
   ShoppingCart,
   LayoutDashboard,
   LogOut,
+  List,
 } from "lucide-react";
 
 export default function DashboardLayout({
@@ -30,6 +31,7 @@ export default function DashboardLayout({
     { label: "Dashboard", href: "/home", icon: LayoutDashboard },
     { label: "Orders", href: "/orders", icon: ShoppingCart },
     { label: "Products", href: "/products", icon: Package },
+    { label: "Product Categories", href: "/categories", icon: List },
     { label: "Users", href: "/users", icon: Users },
   ];
 
