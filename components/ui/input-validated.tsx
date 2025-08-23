@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Eye, EyeOff } from "lucide-react";
 
 const Input = ({
-  type,
+  type = "text",
   label,
   name,
   placeholder,
@@ -14,7 +14,7 @@ const Input = ({
   iconUrl,
   errors,
   stateError,
-  bgColour,
+  bgColour = "bg-white",
   isPending,
   isRequired,
   min,
@@ -37,67 +37,62 @@ const Input = ({
   max?: string;
 }) => {
   const disabledBgColour = "bg-gray-100";
-  const [isShow, setIsShow] = useState(false);
-  const [typeName, setTypeName] = useState(type);
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="flex flex-col">
-      <div className="flex gap-1">
-        <label className="font-mono text-turquoise-900" htmlFor="">
-          {label}
-        </label>
-        {isRequired && <p className="font-mono text-pinklet-500">*</p>}
-      </div>
+    <div className="flex flex-col w-full">
+      <label className="flex items-center gap-1 font-semibold text-gray-800">
+        {label}
+        {isRequired && <span className="text-red-500">*</span>}
+      </label>
 
-      <>
+      <div className="relative flex items-center mt-1">
         {iconUrl && (
           <Image
-            className=""
             src={iconUrl}
-            height={23}
-            width={23}
-            alt={label}
+            width={20}
+            height={20}
+            alt={`${label} icon`}
+            className="absolute left-2 top-1/2 -translate-y-1/2"
           />
         )}
 
-        {isPhoneNumber && <div className="text-turquoise-900">+27</div>}
+        {isPhoneNumber && (
+          <span className="absolute left-2 top-1/2 -translate-y-1/2 text-turquoise-900">
+            +27
+          </span>
+        )}
 
         <input
+          id={name}
+          type={isPassword ? (showPassword ? "text" : "password") : type}
           placeholder={placeholder}
-          className={`border border-black px-3 py-2 rounded w-full ${
-            isPending ? disabledBgColour : bgColour
-          } focus:inset-ring-transparent`}
-          type={typeName ? typeName : "text"}
           disabled={isPending}
+          min={min}
+          max={max}
+          className={`w-full rounded-md border px-3 py-2 pl-${
+            iconUrl || isPhoneNumber ? "8" : "3"
+          } text-gray-900 focus:outline-none focus:ring-2 focus:ring-turquoise-500 transition ${
+            isPending ? disabledBgColour : bgColour
+          }`}
           {...register(name)}
-          min={min ? min : ""}
-          max={max ? max : ""}
         />
 
-        {isPassword &&
-          (isShow ? (
-            <EyeOff
-              className="text-turquoise-900"
-              onClick={() => {
-                setIsShow(false);
-                setTypeName("password");
-              }}
-            />
-          ) : (
-            <Eye
-              className="text-turquoise-900"
-              onClick={() => {
-                setIsShow(true);
-                setTypeName("text");
-              }}
-            />
-          ))}
-      </>
-      {errors && errors[name] && (
-        <span className="text-pinklet-500">{errors[name]?.message}</span>
-      )}
-      {stateError && (
-        <span className="text-pinklet-500">{stateError[name]}</span>
+        {isPassword && (
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-600"
+          >
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        )}
+      </div>
+
+      {(errors?.[name] || stateError?.[name]) && (
+        <p className="mt-1 text-sm text-red-500">
+          {errors?.[name]?.message || stateError?.[name]}
+        </p>
       )}
     </div>
   );

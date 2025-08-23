@@ -8,10 +8,10 @@ const Textarea = ({
   register,
   errors,
   stateError,
-  bgColour,
+  bgColour = "bg-white",
   isPending,
   isRequired,
-  rows,
+  rows = 4,
 }: {
   label: string;
   name: string;
@@ -27,30 +27,27 @@ const Textarea = ({
   const disabledBgColour = "bg-gray-100";
 
   return (
-    <div className="flex flex-col">
-      <div className="flex gap-1">
-        <label className="font-mono text-turquoise-900" htmlFor={name}>
-          {label}
-        </label>
-        {isRequired && <p className="font-mono text-pinklet-500">*</p>}
-      </div>
+    <div className="flex flex-col w-full">
+      <label className="flex items-center gap-1 font-semibold text-gray-800">
+        {label}
+        {isRequired && <span className="text-red-500">*</span>}
+      </label>
 
       <textarea
         id={name}
         placeholder={placeholder}
-        className={`border border-black px-3 py-2 rounded w-full ${
-          isPending ? disabledBgColour : bgColour
-        } focus:inset-ring-transparent`}
+        rows={rows}
         disabled={isPending}
-        rows={rows || 4}
+        className={`mt-1 w-full rounded-md border px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-turquoise-500 transition ${
+          isPending ? disabledBgColour : bgColour
+        }`}
         {...register(name)}
       />
 
-      {errors && errors[name] && (
-        <span className="text-pinklet-500">{errors[name]?.message}</span>
-      )}
-      {stateError && (
-        <span className="text-pinklet-500">{stateError[name]}</span>
+      {(errors?.[name] || stateError?.[name]) && (
+        <p className="mt-1 text-sm text-red-500">
+          {errors?.[name]?.message || stateError?.[name]}
+        </p>
       )}
     </div>
   );
