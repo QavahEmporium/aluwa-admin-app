@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
 
 type ProductCardProps = {
   product: {
@@ -16,16 +19,27 @@ type ProductCardProps = {
 };
 
 const TableRow = ({ product, setDeleteId, setImageUrl }: ProductCardProps) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   return (
     <tr key={product.id} className="hover:bg-gray-50 transition-colors">
       <td className="px-4 py-3">
-        <Image
-          src={`/api/files/${product.imageUrl}`}
-          alt={product.name}
-          width={50}
-          height={50}
-          className="rounded-md border border-gray-200"
-        />
+        <div className="relative w-12 h-12">
+          {/* Skeleton Loader */}
+          {!imageLoaded && (
+            <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-md border border-gray-200" />
+          )}
+
+          <Image
+            src={`/api/files/${product.imageUrl}`}
+            alt={product.name}
+            fill
+            className={`object-cover rounded-md border border-gray-200 transition-opacity duration-300 ${
+              imageLoaded ? "opacity-100" : "opacity-0"
+            }`}
+            onLoad={() => setImageLoaded(true)}
+          />
+        </div>
       </td>
       <td className="px-4 py-3 font-medium">{product.name}</td>
       <td className="px-4 py-3">{product.category}</td>

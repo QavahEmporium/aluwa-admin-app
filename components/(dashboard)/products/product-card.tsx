@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
 import { MoreVertical, Pencil, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
@@ -29,6 +30,8 @@ const ProductCard = ({
   setDeleteId,
   setImageUrl,
 }: ProductCardProps) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   return (
     <div
       key={product.id}
@@ -36,13 +39,22 @@ const ProductCard = ({
     >
       {/* Top Section with Image + Info */}
       <div className="flex gap-4">
-        <Image
-          src={`/api/files/${product.imageUrl}`}
-          alt={product.name}
-          width={100}
-          height={100}
-          className="w-24 h-24 object-cover rounded-lg border border-gray-200"
-        />
+        <div className="relative w-24 h-24 flex-shrink-0">
+          {/* Skeleton Loader */}
+          {!imageLoaded && (
+            <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-lg border border-gray-200" />
+          )}
+
+          <Image
+            src={`/api/files/${product.imageUrl}`}
+            alt={product.name}
+            fill
+            className={`object-cover rounded-lg border border-gray-200 transition-opacity duration-300 ${
+              imageLoaded ? "opacity-100" : "opacity-0"
+            }`}
+            onLoad={() => setImageLoaded(true)}
+          />
+        </div>
 
         <div className="flex flex-col justify-between flex-1">
           <div className="flex justify-between items-start">
