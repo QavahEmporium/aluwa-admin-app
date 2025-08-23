@@ -1,5 +1,6 @@
 "use client";
 import { updateOrderStatusAction } from "@/actions/order";
+import { LoaderIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
@@ -27,27 +28,35 @@ export default function UpdateOrderStatus({
         <button
           onClick={() => updateStatus("shipped")}
           disabled={isPending}
-          className="px-4 py-2 rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition"
+          className="px-4 py-2 w-[165px] flex items-center justify-center rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition"
         >
-          Mark as Shipped
+          {isPending ? (
+            <LoaderIcon className="animate-spin" />
+          ) : (
+            "Mark as Shipped"
+          )}
         </button>
       )}
       {currentStatus !== "delivered" && (
         <button
           onClick={() => updateStatus("delivered")}
           disabled={isPending}
-          className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
+          className="px-4 py-2 w-[165px] flex items-center justify-center rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
         >
-          Mark as Delivered
+          {isPending ? (
+            <LoaderIcon className="animate-spin" />
+          ) : (
+            "Mark as Delivered"
+          )}
         </button>
       )}
       {currentStatus !== "cancelled" && (
         <button
           onClick={() => updateStatus("cancelled")}
           disabled={isPending}
-          className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
+          className="px-4 py-2 w-[128px] flex items-center justify-center rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
         >
-          Cancel Order
+          {isPending ? <LoaderIcon className="animate-spin" /> : "Cancel Order"}
         </button>
       )}
       <Link
