@@ -28,8 +28,8 @@ export const TableRow = ({ cat }: { cat: any }) => {
 
   return (
     <>
-      <tr>
-        <td className="border border-black px-4 py-2">
+      <tr className="hover:bg-gray-50 transition-colors">
+        <td className="px-4 py-3">
           {cat.name}
           {editingCategory && (
             <EditCategoryModal
@@ -63,40 +63,46 @@ export const TableRow = ({ cat }: { cat: any }) => {
             onConfirm={() => handleTogglePublish(cat.id)}
           />
         </td>
-        <td className="border border-black px-4 py-2">{cat.description}</td>
-        <td className="border border-black px-4 py-2">
-          {cat.isPublished ? (
-            <span className="text-green-600 text-sm">Published</span>
-          ) : (
-            <span className="text-gray-500 text-sm">Unpublished</span>
-          )}
-        </td>
-        <td className="border border-black px-4 py-2 flex gap-2">
-          <button
-            onClick={() => {
-              setShowEditModal(true);
-              setEditingCategory(cat);
-            }}
-            className="border border-black px-2 py-1 rounded text-xs"
-          >
-            Edit
-          </button>
-          <button
-            onClick={() => setConfirmDelete(true)}
-            className="px-2 py-1 border border-black rounded text-xs text-red-600"
-          >
-            Delete
-          </button>
-          <button
-            onClick={() => setConfirmPublish(true)}
-            className={`px-2 py-1 border border-black rounded text-xs ${
+        <td className="px-4 py-3">{cat.description}</td>
+        <td className="px-4 py-3">
+          <span
+            className={`px-2 py-0.5 text-xs rounded-full ${
               cat.isPublished
-                ? "bg-yellow-500 text-white"
-                : "bg-green-500 text-white"
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-700"
             }`}
           >
-            {cat.isPublished ? "Unpublish" : "Publish"}
-          </button>
+            {cat.isPublished ? "Published" : "Unpublished"}
+          </span>
+        </td>
+        <td className="py-3 text-center">
+          <div className="inline-flex gap-2">
+            <button
+              onClick={() => {
+                setShowEditModal(true);
+                setEditingCategory(cat);
+              }}
+              className="px-3 py-1 text-xs rounded-md border border-gray-300 hover:bg-gray-100"
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => setConfirmDelete(true)}
+              className="px-3 py-1 text-xs rounded-md border border-gray-300 hover:bg-gray-100"
+            >
+              Delete
+            </button>
+            <button
+              onClick={() => setConfirmPublish(true)}
+              className={`px-3 py-1 border border-gray-300 rounded-md text-xs ${
+                cat.isPublished
+                  ? "bg-yellow-500 text-white"
+                  : "bg-green-500 text-white"
+              }`}
+            >
+              {cat.isPublished ? "Unpublish" : "Publish"}
+            </button>
+          </div>
         </td>
       </tr>
     </>

@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import Link from "next/link";
 import { Plus } from "lucide-react";
 import AddCategoryModal from "./add-category-modal";
 import EditCategoryModal from "./edit-category-modal";
+import { TableRow } from "./table-row";
+import { CategoryCard } from "./category-card";
 
 export default function Categories({ cats }: { cats: any[] }) {
   const [categories, setCategories] = useState<any[]>(cats);
@@ -50,33 +51,7 @@ export default function Categories({ cats }: { cats: any[] }) {
       {/* Mobile */}
       <div className="space-y-4 md:hidden">
         {filteredCategories.map((cat) => (
-          <div
-            key={cat.id}
-            className="block border border-gray-200 shadow-sm p-4 rounded-xl bg-white"
-          >
-            <div className="font-semibold text-sm">{cat.name}</div>
-            <div className="text-sm text-gray-600">{cat.description}</div>
-            <div className="flex justify-between items-center mt-3">
-              <span
-                className={`px-2 py-0.5 text-xs rounded-full ${
-                  cat.active
-                    ? "bg-green-100 text-green-700"
-                    : "bg-red-100 text-red-700"
-                }`}
-              >
-                {cat.active ? "Active" : "Inactive"}
-              </span>
-              <button
-                onClick={() => {
-                  setEditingCategory(cat);
-                  setShowEditModal(true);
-                }}
-                className="px-3 py-1 text-xs rounded-md border border-gray-300 hover:bg-gray-100"
-              >
-                Edit
-              </button>
-            </div>
-          </div>
+          <CategoryCard key={cat.id} cat={cat} />
         ))}
         {filteredCategories.length === 0 && (
           <p className="text-center text-sm text-gray-500">
@@ -98,34 +73,7 @@ export default function Categories({ cats }: { cats: any[] }) {
           </thead>
           <tbody className="text-sm divide-y divide-gray-200">
             {filteredCategories.map((cat) => (
-              <tr key={cat.id} className="hover:bg-gray-50 transition-colors">
-                <td className="px-4 py-3">{cat.name}</td>
-                <td className="px-4 py-3">{cat.description}</td>
-                <td className="px-4 py-3">
-                  <span
-                    className={`px-2 py-0.5 text-xs rounded-full ${
-                      cat.active
-                        ? "bg-green-100 text-green-700"
-                        : "bg-red-100 text-red-700"
-                    }`}
-                  >
-                    {cat.active ? "Active" : "Inactive"}
-                  </span>
-                </td>
-                <td className="py-3 text-center">
-                  <div className="inline-flex gap-2">
-                    <button
-                      onClick={() => {
-                        setEditingCategory(cat);
-                        setShowEditModal(true);
-                      }}
-                      className="px-3 py-1 text-xs rounded-md border border-gray-300 hover:bg-gray-100"
-                    >
-                      Edit
-                    </button>
-                  </div>
-                </td>
-              </tr>
+              <TableRow cat={cat} key={cat.id} />
             ))}
           </tbody>
         </table>
