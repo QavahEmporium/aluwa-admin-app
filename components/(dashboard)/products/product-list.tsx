@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { deleteProductAction } from "@/actions/product";
 import DeleteProductModal from "./delete-product-modal";
 import { Product } from "@/definitions/product";
 import Pagination from "@/components/ui/pagination";
+import ProductCard from "./product-card";
+import TableRow from "./table-row";
 
 interface CategoryOption {
   label: string;
@@ -111,57 +112,12 @@ export default function ProductListPage({
       {/* Mobile */}
       <div className="space-y-4 md:hidden">
         {paginatedProducts.map((product) => (
-          <div
+          <ProductCard
             key={product.id}
-            className="border border-gray-200 shadow-sm p-4 rounded-xl flex flex-col gap-3 bg-white"
-          >
-            <div className="flex justify-between items-start">
-              <div className="flex flex-row gap-3">
-                <Image
-                  src={`/api/files/${product.imageUrl}`}
-                  alt={product.name}
-                  width={60}
-                  height={30}
-                  className="rounded-md border border-gray-200"
-                />
-                <div>
-                  <div className="font-semibold">{product.name}</div>
-                  <div className="text-sm text-gray-600">
-                    {product.category}
-                  </div>
-                  <div className="font-bold mt-1">
-                    ${product.price.toFixed(2)}
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    Stock: {product.stock}
-                  </div>
-                  <span
-                    className={`inline-block mt-1 px-2 py-0.5 text-xs rounded-full ${
-                      product.isPublished
-                        ? "bg-green-100 text-green-700"
-                        : "bg-gray-200 text-gray-600"
-                    }`}
-                  >
-                    {product.isPublished ? "Published" : "Unpublished"}
-                  </span>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <Link
-                  href={`/products/${product.id}/edit`}
-                  className="px-3 py-1 rounded-md border border-gray-300 text-xs hover:bg-gray-100"
-                >
-                  Edit
-                </Link>
-                <button
-                  onClick={() => setDeleteId(product.id)}
-                  className="px-3 py-1 rounded-md border border-red-300 text-xs text-red-600 hover:bg-red-50"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
+            product={product}
+            setDeleteId={setDeleteId}
+            setImageUrl={setImageUrl}
+          />
         ))}
       </div>
 
@@ -181,54 +137,11 @@ export default function ProductListPage({
           </thead>
           <tbody className="text-sm divide-y divide-gray-200">
             {paginatedProducts.map((product) => (
-              <tr
-                key={product.id}
-                className="hover:bg-gray-50 transition-colors"
-              >
-                <td className="px-4 py-3">
-                  <Image
-                    src={`/api/files/${product.imageUrl}`}
-                    alt={product.name}
-                    width={50}
-                    height={50}
-                    className="rounded-md border border-gray-200"
-                  />
-                </td>
-                <td className="px-4 py-3 font-medium">{product.name}</td>
-                <td className="px-4 py-3">{product.category}</td>
-                <td className="px-4 py-3">${product.price.toFixed(2)}</td>
-                <td className="px-4 py-3">{product.stock}</td>
-                <td className="px-4 py-3">
-                  <span
-                    className={`px-2 py-0.5 text-xs rounded-full ${
-                      product.isPublished
-                        ? "bg-green-100 text-green-700"
-                        : "bg-gray-200 text-gray-600"
-                    }`}
-                  >
-                    {product.isPublished ? "Published" : "Unpublished"}
-                  </span>
-                </td>
-                <td className="py-3">
-                  <div className="inline-flex gap-2">
-                    <Link
-                      href={`/products/${product.id}/edit`}
-                      className="px-3 py-1 rounded-md border border-gray-300 text-xs hover:bg-gray-100"
-                    >
-                      Edit
-                    </Link>
-                    <button
-                      onClick={() => {
-                        setDeleteId(product.id);
-                        setImageUrl(product.imageUrl);
-                      }}
-                      className="px-3 py-1 rounded-md border border-red-300 text-xs text-red-600 hover:bg-red-50"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
+              <TableRow
+                product={product}
+                setDeleteId={setDeleteId}
+                setImageUrl={setImageUrl}
+              />
             ))}
           </tbody>
         </table>
