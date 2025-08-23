@@ -46,7 +46,7 @@ export default function UsersClient({ users }: { users: User[] }) {
         {filteredUsers.map((user) => (
           <div
             key={user.id}
-            className="flex items-center gap-4 p-4 border border-gray-200 rounded-xl shadow-sm bg-white"
+            className="flex items-center gap-3 p-4 border border-gray-200 rounded-xl shadow-sm bg-white"
           >
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 border border-gray-300">
               <UserIcon className="w-6 h-6 text-gray-500" />
@@ -61,7 +61,7 @@ export default function UsersClient({ users }: { users: User[] }) {
             </div>
             <button
               onClick={() => router.push(`/users/${user.id}`)}
-              className="px-3 py-1 rounded-lg border border-gray-300 hover:bg-gray-100 transition"
+              className="px-2 py-1 rounded-lg border border-gray-300 text-sm hover:bg-gray-100 transition"
             >
               View
             </button>
