@@ -5,7 +5,7 @@ import {
   togglePublishProductAction,
 } from "@/actions/product";
 import { deleteFileByNameAction, uploadFile } from "@/actions/file";
-import { SubmitButton } from "@/components/ui/buttons";
+import { BackButton, SubmitButton } from "@/components/ui/buttons";
 import InputValidated from "@/components/ui/input-validated";
 import Select from "@/components/ui/select-validated";
 import Textarea from "@/components/ui/textarea-validated";
@@ -65,9 +65,9 @@ const ProductAddForm = ({
   return (
     <div className="p-4 max-w-3xl mx-auto">
       <div className="flex justify-between mb-4">
-        <h1 className="text-xl md:text-2xl font-bold">
-          {product.id ? "Edit" : "Add"} Product
-        </h1>
+        <div className="mb-6">
+          <BackButton name={`${product.id ? "Edit" : "Add"} Product`} />
+        </div>
 
         {/* ✅ Publish / Unpublish buttons */}
         {product.id && (
