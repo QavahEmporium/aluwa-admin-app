@@ -138,6 +138,7 @@ export default function ProductListPage({
           <tbody className="text-sm divide-y divide-gray-200">
             {paginatedProducts.map((product) => (
               <TableRow
+                key={product.id}
                 product={product}
                 setDeleteId={setDeleteId}
                 setImageUrl={setImageUrl}
