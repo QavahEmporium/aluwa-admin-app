@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 
 export default function OrdersListPage({ orders }: { orders: any[] }) {
   const [allOrders, setAllOrders] = useState<any[]>(orders);
@@ -57,8 +58,10 @@ export default function OrdersListPage({ orders }: { orders: any[] }) {
             className="block border border-gray-200 shadow-sm p-4 rounded-xl bg-white"
           >
             <div className="flex justify-between items-start">
-              <div>
-                <div className="font-semibold text-sm">Order #{order.id}</div>
+              <div className="w-full">
+                <div className="flex flex-row justify-between font-semibold text-sm">
+                  <p>Order #{order.id}</p> <ChevronRight />
+                </div>
                 <div className="text-sm text-gray-600">{order.date}</div>
                 <div className="font-bold mt-1">R {order.total.toFixed(2)}</div>
                 <span
