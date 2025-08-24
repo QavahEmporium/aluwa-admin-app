@@ -3,13 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { MoreVertical, Pencil, Trash2 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ChevronRight, MoreVertical, Pencil, Trash2 } from "lucide-react";
 
 type ProductCardProps = {
   product: {
@@ -38,7 +32,7 @@ const ProductCard = ({
       className="border border-gray-200 shadow-sm p-4 rounded-xl flex flex-col gap-4 bg-white"
     >
       {/* Top Section with Image + Info */}
-      <div className="flex gap-4">
+      <Link href={`/products/${product.id}/edit`} className="flex gap-4">
         <div className="relative w-24 h-24 flex-shrink-0">
           {/* Skeleton Loader */}
           {!imageLoaded && (
@@ -65,35 +59,7 @@ const ProductCard = ({
               <div className="text-sm text-gray-600">{product.category}</div>
             </div>
 
-            {/* Dropdown Menu */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="p-1 rounded-full hover:bg-gray-100">
-                  <MoreVertical className="w-5 h-5 text-gray-600" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-40">
-                <DropdownMenuItem asChild>
-                  <Link
-                    href={`/products/${product.id}/edit`}
-                    className="flex items-center gap-2"
-                  >
-                    <Pencil className="w-4 h-4" />
-                    Edit
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    setDeleteId(product.id);
-                    setImageUrl(product.imageUrl);
-                  }}
-                  className="flex items-center gap-2 text-red-600 focus:text-red-600"
-                >
-                  <Trash2 className="w-4 h-4" />
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <ChevronRight />
           </div>
 
           <div>
@@ -110,7 +76,7 @@ const ProductCard = ({
             </span>
           </div>
         </div>
-      </div>
+      </Link>
     </div>
   );
 };
