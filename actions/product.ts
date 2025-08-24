@@ -16,6 +16,7 @@ import { deleteFileByNameAction } from "./file";
 export async function deleteProductAction(id: string, imageUrl: string) {
   await deleteFileByNameAction(imageUrl);
   await deleteProduct(id);
+  revalidatePath("/products");
 }
 
 export async function createProductAction(
