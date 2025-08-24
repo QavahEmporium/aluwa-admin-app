@@ -20,9 +20,9 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const pathname = usePathname(); // Track current route
+  const pathname = usePathname();
 
-  // Close sidebar when the route changes
+  // Auto-close when route changes
   useEffect(() => {
     setSidebarOpen(false);
   }, [pathname]);
@@ -31,88 +31,112 @@ export default function DashboardLayout({
     { label: "Dashboard", href: "/home", icon: LayoutDashboard },
     { label: "Orders", href: "/orders", icon: ShoppingCart },
     { label: "Products", href: "/products", icon: Package },
-    { label: "Product Categories", href: "/categories", icon: List },
+    { label: "Categories", href: "/categories", icon: List },
     { label: "Users", href: "/users", icon: Users },
   ];
 
   return (
-    <div className="min-h-screen flex bg-white">
-      {/* Mobile Sidebar */}
+    <div className="min-h-screen flex bg-gray-50">
+      {/* ✅ Mobile Sidebar */}
+      {/* Backdrop */}
       <div
-        className={`fixed inset-0 z-40 md:hidden transition-transform duration-300 ${
+        className={`fixed inset-0 z-40 bg-black transition-opacity duration-300 ${
+          sidebarOpen ? "opacity-50" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={() => setSidebarOpen(false)}
+      />
+
+      {/* Sidebar Panel */}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl h-full p-4 flex flex-col transform transition-transform duration-300 ease-in-out md:hidden ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div
-          className="absolute inset-0 bg-black bg-opacity-50"
-          onClick={() => setSidebarOpen(false)}
-        />
-        <aside className="relative z-50 w-64 bg-white border-r border-black h-full p-4 flex flex-col">
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="font-bold text-xl">Admin</h1>
-            <button onClick={() => setSidebarOpen(false)}>
-              <X size={20} />
-            </button>
-          </div>
-          <nav className="flex-1 space-y-2">
-            {menuItems.map(({ label, href, icon: Icon }) => (
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="font-bold text-xl text-turquoise-700">Admin</h1>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="p-2 rounded hover:bg-gray-100"
+          >
+            <X size={20} />
+          </button>
+        </div>
+        <nav className="flex-1 space-y-1">
+          {menuItems.map(({ label, href, icon: Icon }) => {
+            const isActive = pathname === href;
+            return (
               <Link
                 key={href}
                 href={href}
-                className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+                onClick={() => setSidebarOpen(false)} // ✅ Close on click
+                className={`flex items-center gap-3 px-3 py-2 rounded-lg transition ${
+                  isActive
+                    ? "bg-turquoise-100 text-turquoise-700 font-medium"
+                    : "hover:bg-gray-100 text-gray-700"
+                }`}
               >
                 <Icon size={18} />
                 {label}
               </Link>
-            ))}
-          </nav>
-          <button className="flex items-center gap-2 px-3 py-2 mt-6 border border-black rounded hover:bg-gray-100">
-            <LogOut size={18} />
-            Logout
-          </button>
-        </aside>
-      </div>
-
-      {/* Desktop Sidebar */}
-      <aside className="hidden md:flex md:flex-col w-64 border-r border-black p-4">
-        <h1 className="font-bold text-xl mb-6">Admin</h1>
-        <nav className="flex-1 space-y-2">
-          {menuItems.map(({ label, href, icon: Icon }) => (
-            <Link
-              key={href}
-              href={href}
-              className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
-            >
-              <Icon size={18} />
-              {label}
-            </Link>
-          ))}
+            );
+          })}
         </nav>
-        <button className="flex items-center gap-2 px-3 py-2 mt-6 border border-black rounded hover:bg-gray-100">
+        <button className="flex items-center gap-2 px-3 py-2 mt-6 border border-gray-300 rounded-lg hover:bg-gray-100 transition">
           <LogOut size={18} />
           Logout
         </button>
       </aside>
 
-      {/* Main Content */}
+      {/* ✅ Desktop Sidebar */}
+      <aside className="hidden md:flex md:flex-col w-64 bg-white border-r border-gray-200 shadow-sm p-4">
+        <h1 className="font-bold text-xl text-turquoise-700 mb-6">Admin</h1>
+        <nav className="flex-1 space-y-1">
+          {menuItems.map(({ label, href, icon: Icon }) => {
+            const isActive = pathname === href;
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={`flex items-center gap-3 px-3 py-2 rounded-lg transition ${
+                  isActive
+                    ? "bg-turquoise-100 text-turquoise-700 font-medium"
+                    : "hover:bg-gray-100 text-gray-700"
+                }`}
+              >
+                <Icon size={18} />
+                {label}
+              </Link>
+            );
+          })}
+        </nav>
+        <button className="flex items-center gap-2 px-3 py-2 mt-6 border border-gray-300 rounded-lg hover:bg-gray-100 transition">
+          <LogOut size={18} />
+          Logout
+        </button>
+      </aside>
+
+      {/* ✅ Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Top Navbar */}
-        <header className="flex items-center justify-between border-b border-black p-4">
+        {/* Top Navbar (fixed) */}
+        <header className="sticky top-0 z-30 flex items-center justify-between border-b border-gray-200 bg-white p-4 shadow-sm">
           <div className="flex items-center gap-2">
-            <button className="md:hidden" onClick={() => setSidebarOpen(true)}>
+            <button
+              className="md:hidden p-2 rounded hover:bg-gray-100"
+              onClick={() => setSidebarOpen(true)}
+            >
               <Menu size={22} />
             </button>
-            <h2 className="font-semibold text-lg">Dashboard</h2>
+            <h2 className="font-semibold text-lg text-gray-800">Dashboard</h2>
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center text-sm">
+            <div className="w-9 h-9 rounded-full bg-turquoise-600 text-white flex items-center justify-center text-sm font-semibold">
               A
             </div>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-4">{children}</main>
+        <main className="flex-1 p-6">{children}</main>
       </div>
     </div>
   );
