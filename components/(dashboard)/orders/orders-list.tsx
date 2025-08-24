@@ -3,24 +3,36 @@
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import Pagination from "@/components/ui/pagination";
 
 export default function OrdersListPage({ orders }: { orders: any[] }) {
   const [allOrders, setAllOrders] = useState<any[]>(orders);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("All");
 
+  // pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
+
   useEffect(() => {
     setAllOrders(orders);
   }, [orders]);
 
   const filteredOrders = useMemo(() => {
-    return orders.filter(
+    return allOrders.filter(
       (order) =>
         (status === "All" || order.status === status) &&
         (order.customer.toLowerCase().includes(search.toLowerCase()) ||
           order.id.toLowerCase().includes(search.toLowerCase()))
     );
-  }, [orders, search, status]);
+  }, [allOrders, search, status]);
+
+  const totalPages = Math.ceil(filteredOrders.length / pageSize);
+
+  const paginatedOrders = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredOrders.slice(start, start + pageSize);
+  }, [filteredOrders, currentPage]);
 
   return (
     <div className="p-0 md:p-4">
@@ -32,12 +44,18 @@ export default function OrdersListPage({ orders }: { orders: any[] }) {
           type="text"
           placeholder="Search by Order ID..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setCurrentPage(1); // reset on search
+          }}
           className="border border-gray-300 px-3 py-2 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 focus:ring-black"
         />
         <select
           value={status}
-          onChange={(e) => setStatus(e.target.value)}
+          onChange={(e) => {
+            setStatus(e.target.value);
+            setCurrentPage(1); // reset on filter
+          }}
           className="border border-gray-300 px-3 py-2 rounded-lg w-full md:w-1/4 focus:outline-none focus:ring-2 focus:ring-black"
         >
           <option value="All">All Statuses</option>
@@ -49,9 +67,18 @@ export default function OrdersListPage({ orders }: { orders: any[] }) {
         </select>
       </div>
 
-      {/* Mobile */}
+      {/* Mobile pagination */}
+      <div className="md:hidden mb-4">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      </div>
+
+      {/* Mobile list */}
       <div className="space-y-4 md:hidden">
-        {filteredOrders.map((order) => (
+        {paginatedOrders.map((order) => (
           <Link
             key={order.id}
             href={`/orders/${order.id}`}
@@ -85,7 +112,7 @@ export default function OrdersListPage({ orders }: { orders: any[] }) {
         ))}
       </div>
 
-      {/* Desktop */}
+      {/* Desktop table */}
       <div className="hidden md:block overflow-x-auto">
         <table className="w-full border border-gray-200 shadow-sm rounded-lg overflow-hidden">
           <thead className="bg-gray-50 text-sm">
@@ -99,7 +126,7 @@ export default function OrdersListPage({ orders }: { orders: any[] }) {
             </tr>
           </thead>
           <tbody className="text-sm divide-y divide-gray-200">
-            {filteredOrders.map((order) => (
+            {paginatedOrders.map((order) => (
               <tr key={order.id} className="hover:bg-gray-50 transition-colors">
                 <td className="px-4 py-3 font-mono">{order.id}</td>
                 <td className="px-4 py-3">{order.date}</td>
@@ -136,6 +163,15 @@ export default function OrdersListPage({ orders }: { orders: any[] }) {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Desktop pagination */}
+      <div className="mt-4">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </div>
   );
