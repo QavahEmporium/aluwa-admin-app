@@ -1,6 +1,7 @@
 // app/(dashboard)/users/[id]/page.tsx
 import { getUserWithOrders, listUsers } from "@/data/customers";
 import UserDetailClient from "@/components/(dashboard)/users/[id]/user-details";
+import { Suspense } from "react";
 
 export async function generateStaticParams() {
   const users = await listUsers();
@@ -24,7 +25,9 @@ export default async function UserDetailPage({
 
   return (
     <div className="md:p-4 md:p-6 max-w-5xl mx-auto">
-      <UserDetailClient user={user} />
+      <Suspense fallback={<>Loading ...</>}>
+        <UserDetailClient user={user} />
+      </Suspense>
     </div>
   );
 }
