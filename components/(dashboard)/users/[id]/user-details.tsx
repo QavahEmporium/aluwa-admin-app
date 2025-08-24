@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { User as UserIcon, ChevronRight } from "lucide-react";
 import { BackButton } from "@/components/ui/buttons";
 import Link from "next/link";
@@ -29,8 +28,6 @@ type User = {
 };
 
 export default function UserDetailClient({ user }: { user: User }) {
-  const router = useRouter();
-
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}

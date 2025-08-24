@@ -28,7 +28,7 @@ export default function UpdateOrderStatus({
         <button
           onClick={() => updateStatus("shipped")}
           disabled={isPending}
-          className="px-4 py-2 w-[161px] flex items-center justify-center rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition"
+          className="p-2 w-[161px] flex items-center justify-center rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition"
         >
           {isPending ? (
             <LoaderIcon className="animate-spin" />
@@ -41,7 +41,7 @@ export default function UpdateOrderStatus({
         <button
           onClick={() => updateStatus("delivered")}
           disabled={isPending}
-          className="px-4 py-2 w-[161px] flex items-center justify-center rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
+          className="p-2 w-[161px] flex items-center justify-center rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
         >
           {isPending ? (
             <LoaderIcon className="animate-spin" />
@@ -54,7 +54,7 @@ export default function UpdateOrderStatus({
         <button
           onClick={() => updateStatus("cancelled")}
           disabled={isPending}
-          className="px-4 py-2 w-[127px] flex items-center justify-center rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
+          className="p-2 w-[127px] flex items-center justify-center rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
         >
           {isPending ? <LoaderIcon className="animate-spin" /> : "Cancel Order"}
         </button>

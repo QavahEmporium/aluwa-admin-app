@@ -3,7 +3,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { User as UserIcon, Search } from "lucide-react";
+import { User as UserIcon, Search, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 type User = {
   id: string;
@@ -44,28 +45,27 @@ export default function UsersClient({ users }: { users: User[] }) {
       {/* Mobile Cards */}
       <div className="flex flex-col gap-4 md:hidden">
         {filteredUsers.map((user) => (
-          <div
+          <Link
+            href={`/users/${user.id}`}
             key={user.id}
-            className="flex items-center gap-3 p-4 border border-gray-200 rounded-xl shadow-sm bg-white"
+            className="flex items-center justify-between gap-3 p-4 border border-gray-200 rounded-xl shadow-sm bg-white"
           >
-            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 border border-gray-300">
-              <UserIcon className="w-6 h-6 text-gray-500" />
+            <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 border border-gray-300">
+                <UserIcon className="w-6 h-6 text-gray-500" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-base">{user.name}</h3>
+                <p className="text-sm text-gray-600">{user.email}</p>
+                <p className="text-sm text-gray-800 mt-1">
+                  Orders: {user.totalOrders} | Spend: R
+                  {user.totalSpend.toFixed(2)}
+                </p>
+              </div>{" "}
             </div>
-            <div className="flex-1">
-              <h3 className="font-semibold text-base">{user.name}</h3>
-              <p className="text-sm text-gray-600">{user.email}</p>
-              <p className="text-sm text-gray-800 mt-1">
-                Orders: {user.totalOrders} | Spend: R
-                {user.totalSpend.toFixed(2)}
-              </p>
-            </div>
-            <button
-              onClick={() => router.push(`/users/${user.id}`)}
-              className="px-2 py-1 rounded-lg border border-gray-300 text-sm hover:bg-gray-100 transition"
-            >
-              View
-            </button>
-          </div>
+
+            <ChevronRight />
+          </Link>
         ))}
       </div>
 
