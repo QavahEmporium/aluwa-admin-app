@@ -3,33 +3,20 @@
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export const SubmitButton = ({
-  name,
-  isPending,
-}: {
+interface SubmitButtonProps {
   name: string;
-  isPending?: boolean;
-}) => {
+  isPending: boolean;
+}
+
+export const SubmitButton = ({ name, isPending }: SubmitButtonProps) => {
   return (
-    <>
-      {isPending ? (
-        <button
-          type="button"
-          disabled={isPending}
-          className="border border-black px-4 py-2 rounded hover:bg-black hover:text-white transition"
-        >
-          Saving...
-        </button>
-      ) : (
-        <button
-          type="submit"
-          disabled={isPending}
-          className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition text-center"
-        >
-          {name}
-        </button>
-      )}
-    </>
+    <button
+      type="submit"
+      disabled={isPending}
+      className="w-full flex items-center justify-center gap-2 bg-black text-white py-2 rounded-md hover:bg-gray-800 transition disabled:opacity-50"
+    >
+      {isPending ? "Loading..." : name}
+    </button>
   );
 };
 

@@ -132,7 +132,10 @@ const ProductAddForm = ({
           className="w-full rounded-md border px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-turquoise-500 transition"
         />
       </div>
-      <SubmitButton name={`${product.id ? "Update" : "Add"} Product`} />
+      <SubmitButton
+        name={`${product.id ? "Update" : "Add"} Product`}
+        isPending={isPending}
+      />
     </form>
   );
 };
