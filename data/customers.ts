@@ -27,7 +27,7 @@ export async function listUsers() {
   }, {} as Record<string, { totalOrders: number; totalSpend: number }>);
 
   // fetch users
-  const users = (await User.find().lean()) as any[];
+  const users = (await User.find({ role: "customer" }).lean()) as any[];
 
   return users.map((u) => ({
     id: u._id.toString(),
