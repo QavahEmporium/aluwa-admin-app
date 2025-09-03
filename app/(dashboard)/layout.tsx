@@ -12,7 +12,10 @@ import {
   LayoutDashboard,
   LogOut,
   List,
+  User,
+  Settings,
 } from "lucide-react";
+import UserDropdown from "@/components/(dashboard)/user-dropdown";
 
 export default function DashboardLayout({
   children,
@@ -20,9 +23,10 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const pathname = usePathname();
 
-  // Auto-close when route changes
+  // Auto-close sidebar on route change
   useEffect(() => {
     setSidebarOpen(false);
   }, [pathname]);
@@ -38,7 +42,6 @@ export default function DashboardLayout({
   return (
     <div className="min-h-screen flex bg-gray-50">
       {/* ✅ Mobile Sidebar */}
-      {/* Backdrop */}
       <div
         className={`fixed inset-0 z-40 bg-black transition-opacity duration-300 ${
           sidebarOpen ? "opacity-50" : "opacity-0 pointer-events-none"
@@ -46,7 +49,6 @@ export default function DashboardLayout({
         onClick={() => setSidebarOpen(false)}
       />
 
-      {/* Sidebar Panel */}
       <aside
         className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl h-full p-4 flex flex-col transform transition-transform duration-300 ease-in-out md:hidden ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -68,7 +70,7 @@ export default function DashboardLayout({
               <Link
                 key={href}
                 href={href}
-                onClick={() => setSidebarOpen(false)} // ✅ Close on click
+                onClick={() => setSidebarOpen(false)}
                 className={`flex items-center gap-3 px-3 py-2 rounded-lg transition ${
                   isActive
                     ? "bg-turquoise-100 text-turquoise-700 font-medium"
@@ -117,7 +119,7 @@ export default function DashboardLayout({
 
       {/* ✅ Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Top Navbar (fixed) */}
+        {/* Top Navbar */}
         <header className="sticky top-0 z-30 flex items-center justify-between border-b border-gray-200 bg-white p-4 shadow-sm">
           <div className="flex items-center gap-2">
             <button
@@ -128,11 +130,9 @@ export default function DashboardLayout({
             </button>
             <h2 className="font-semibold text-lg text-gray-800">Dashboard</h2>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-turquoise-600 text-white flex items-center justify-center text-sm font-semibold">
-              A
-            </div>
-          </div>
+
+          {/* ✅ User Profile Dropdown */}
+          <UserDropdown />
         </header>
 
         {/* Page Content */}

@@ -1,31 +1,21 @@
 // /actions/auth.ts
 "use server";
+
 import { getUser } from "@/data/user";
 import { loginUserformSchema, LoginUserState } from "@/definitions/auth";
-import { createSession } from "@/lib/session";
+import { connectDB } from "@/lib/db";
+import { createSession, deleteSession } from "@/lib/session";
+import User from "@/models/user";
+import { updateUser } from "@/services/auth";
 import bcrypt from "bcrypt";
 import { redirect } from "next/navigation";
-
-/* export async function loginUser(prevState: any, formData: FormData) {
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
-
-  if (email !== "admin@example.com" || password !== "password123") {
-    return {
-      message: "Invalid credentials",
-      errors: {
-        email: ["Incorrect email or password"],
-      },
-    };
-  }
-
-  return { message: "Login successful", errors: {} };
-} */
 
 export async function loginUser(
   prevState: LoginUserState | undefined,
   formData: FormData
 ) {
+  await connectDB();
+
   const validatedFields = loginUserformSchema.safeParse(
     Object.fromEntries(formData)
   );
@@ -63,4 +53,18 @@ export async function loginUser(
   }
 
   redirect("/home?from=login");
+}
+
+export async function resetPassword(newPassword: string) {
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  await updateUser({ password: hashedPassword });
+}
+
+export async function updateProfile(data: any) {
+  await updateUser(data);
+}
+
+export async function logout() {
+  await deleteSession();
+  redirect("/login");
 }
