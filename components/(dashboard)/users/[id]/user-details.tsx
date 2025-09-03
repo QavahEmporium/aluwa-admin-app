@@ -71,7 +71,7 @@ export default function UserDetailClient({ user }: { user: User }) {
                     Order #{order.id.slice(-6)}
                   </span>
                   <span className="font-medium text-gray-800">
-                    ${order.totalAmount.toFixed(2)}
+                    R{order.totalAmount.toFixed(2)}
                   </span>
                   <span className="text-xs text-gray-500">
                     {new Date(order.createdAt).toLocaleDateString()}
@@ -122,7 +122,7 @@ export default function UserDetailClient({ user }: { user: User }) {
                     <td className="px-4 py-2">{order.id}</td>
                     <td className="px-4 py-2 text-center">{order.status}</td>
                     <td className="px-4 py-2 text-right">
-                      ${order.totalAmount.toFixed(2)}
+                      R{order.totalAmount.toFixed(2)}
                     </td>
                     <td className="px-4 py-2 text-center">
                       {new Date(order.createdAt).toLocaleDateString()}

@@ -43,7 +43,7 @@ const TableRow = ({ product, setDeleteId, setImageUrl }: ProductCardProps) => {
       </td>
       <td className="px-4 py-3 font-medium">{product.name}</td>
       <td className="px-4 py-3">{product.category}</td>
-      <td className="px-4 py-3">${product.price.toFixed(2)}</td>
+      <td className="px-4 py-3">R{product.price.toFixed(2)}</td>
       <td className="px-4 py-3">{product.stock}</td>
       <td className="px-4 py-3">
         <span

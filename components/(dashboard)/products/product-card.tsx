@@ -63,7 +63,7 @@ const ProductCard = ({
           </div>
 
           <div>
-            <div className="font-bold mt-1">${product.price.toFixed(2)}</div>
+            <div className="font-bold mt-1">R{product.price.toFixed(2)}</div>
             <div className="text-sm text-gray-600">Stock: {product.stock}</div>
             <span
               className={`inline-block mt-2 px-2 py-0.5 text-xs rounded-full ${

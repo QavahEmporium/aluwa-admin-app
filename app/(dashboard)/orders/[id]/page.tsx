@@ -108,7 +108,7 @@ export default async function OrderDetailPage({
                     <td className="px-4 py-2">{item.name}</td>
                     <td className="px-4 py-2 text-center">{item.quantity}</td>
                     <td className="px-4 py-2 text-right">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      R{(item.price * item.quantity).toFixed(2)}
                     </td>
                   </tr>
                 ))}
