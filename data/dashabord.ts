@@ -12,7 +12,7 @@ export const getStatsData = async () => {
   ]);
   const totalRevenue = totalRevenueAgg[0]?.total || 0;
   const totalProducts = await Product.countDocuments();
-  const totalUsers = await User.countDocuments();
+  const totalUsers = await User.find({ role: "customer" }).countDocuments();
 
   return {
     totalOrders,
