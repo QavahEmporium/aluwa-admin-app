@@ -22,7 +22,7 @@ export async function getOrderById(id: string) {
   await connectDB();
 
   return await Order.findById(id)
-    .populate("userId", "name email")
+    .populate("userId", "name email contactNumber")
     .populate("shippingAddressId")
     .lean();
 }

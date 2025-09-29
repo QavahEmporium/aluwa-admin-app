@@ -40,11 +40,13 @@ export default async function OrderDetailPage({
 
       {/* Order Info */}
       <div className="bg-white border border-gray-200 shadow-sm rounded-xl p-4 mb-6">
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="md:flex md:justify-between md:pr-8 grid grid-cols-2 gap-4">
           <div className="flex flex-col gap-4">
-            <div>
+            <div className="w-full">
               <p className="font-medium">Order ID</p>
-              <p className="text-gray-600">{id}</p>
+              <p className="text-gray-600 overflow-hidden text-ellipsis">
+                {id}
+              </p>
             </div>
             <div>
               <p className="font-medium">Status</p>
@@ -73,6 +75,14 @@ export default async function OrderDetailPage({
             <div>
               <p className="font-medium">Total Amount</p>
               <p className="text-gray-600">R {order.totalAmount.toFixed(2)}</p>
+            </div>
+          </div>{" "}
+          <div className="flex flex-col gap-4">
+            <div>
+              <p className="font-medium">Phone Number</p>
+              <p className="text-gray-600">
+                {order.userId?.contactNumber || "N/A"}
+              </p>
             </div>
           </div>
         </div>
